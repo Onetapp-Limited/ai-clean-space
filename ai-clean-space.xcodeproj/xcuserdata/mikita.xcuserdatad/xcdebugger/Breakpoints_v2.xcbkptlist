@@ -36,34 +36,6 @@
             landmarkType = "24">
             <Locations>
                <Location
-                  uuid = "3A997F42-BB0D-40B2-81D4-E1443897E05B - 3a3824c4b053d0bd"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ai_clean_space.AICleanerContactCardWithCustomNavView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ContactView/AICleanerContactCardWithCustomNavView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "12"
-                  endingLineNumber = "12">
-               </Location>
-               <Location
-                  uuid = "3A997F42-BB0D-40B2-81D4-E1443897E05B - f7da5bc69957368d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.overlay&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(_: &#x3c4;_1_0, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.navigationBarHidden(Swift.Bool) -&gt; some&gt;&gt;.0)&gt; in ai_clean_space.AICleanerContactCardWithCustomNavView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ContactView/AICleanerContactCardWithCustomNavView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14">
-               </Location>
-               <Location
                   uuid = "3A997F42-BB0D-40B2-81D4-E1443897E05B - 8aab47c4f3a3b605"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -110,34 +82,6 @@
             landmarkType = "24">
             <Locations>
                <Location
-                  uuid = "36EC36CD-A5E0-4FDA-8C7B-74C354BE91F5 - 2e13f3de54de8801"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ai_clean_space.ContactDetailSheetView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ContactView/ContactDetailSheetView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "8"
-                  endingLineNumber = "8">
-               </Location>
-               <Location
-                  uuid = "36EC36CD-A5E0-4FDA-8C7B-74C354BE91F5 - 8d72b75ab596f964"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in ai_clean_space.ContactDetailSheetView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ContactView/ContactDetailSheetView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "9"
-                  endingLineNumber = "9">
-               </Location>
-               <Location
                   uuid = "36EC36CD-A5E0-4FDA-8C7B-74C354BE91F5 - d4fe8a6fb9be43ed"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -183,34 +127,6 @@
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
-               <Location
-                  uuid = "DD237577-D20A-49DE-A440-01DEDAD93857 - 1c7083d97702eb2f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ai_clean_space.AICleanerSelectableSystemContactRowView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ContactView/AICleanerSelectableSystemContactRowView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14">
-               </Location>
-               <Location
-                  uuid = "DD237577-D20A-49DE-A440-01DEDAD93857 - f6311b9ad8758d84"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.contentShape&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.Shape&gt;(_: &#x3c4;_1_0, eoFill: Swift.Bool) -&gt; some&gt;&gt;.0 in ai_clean_space.AICleanerSelectableSystemContactRowView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ContactView/AICleanerSelectableSystemContactRowView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "15"
-                  endingLineNumber = "15">
-               </Location>
                <Location
                   uuid = "DD237577-D20A-49DE-A440-01DEDAD93857 - c2352460ab8083b6"
                   shouldBeEnabled = "Yes"
@@ -274,34 +190,6 @@
             landmarkType = "24">
             <Locations>
                <Location
-                  uuid = "091058B4-546B-4D80-811E-848C7B00B407 - fc79214a93b78d54"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ai_clean_space.SimilarityPhotoDetailView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ScanView/Screens/PhotoPreviewDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "21"
-                  endingLineNumber = "21">
-               </Location>
-               <Location
-                  uuid = "091058B4-546B-4D80-811E-848C7B00B407 - a00881a77c0cb5b7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.background&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ShapeStyle&gt;(_: &#x3c4;_1_0, ignoresSafeAreaEdges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, SwiftUI.GeometryReader&lt;&lt;&lt;opaque return type of SwiftUI.View.background&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ShapeStyle&gt;(_: &#x3c4;_1_0, ignoresSafeAreaEdges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0&gt;, &lt;&lt;opaque return type of SwiftUI.View.animation&lt;&#x3c4;_0_0 where &#x3c4;_1_0: Swift.Equatable&gt;(_: Swift.Optional&lt;SwiftUI.Animation&gt;, value: &#x3c4;_1_0) -&gt; some&gt;&gt;.0)&gt; in ai_clean_space.SimilarityPhotoDetailView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ScanView/Screens/PhotoPreviewDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "23"
-                  endingLineNumber = "23">
-               </Location>
-               <Location
                   uuid = "091058B4-546B-4D80-811E-848C7B00B407 - cd581c63b157fb2c"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -364,34 +252,6 @@
             landmarkType = "24">
             <Locations>
                <Location
-                  uuid = "57B25E0E-00A4-47BB-8F52-7B91CCA605F8 - 505efdf07afdf091"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #4 () -&gt; SwiftUI.Button&lt;SwiftUI.Text&gt; in ai_clean_space.AICleanerDuplicateContactsView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ContactView/AICleanerDuplicateContactsView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "125"
-                  endingLineNumber = "125">
-               </Location>
-               <Location
-                  uuid = "57B25E0E-00A4-47BB-8F52-7B91CCA605F8 - ea230154155e5f68"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #4 () -&gt; SwiftUI.Button&lt;SwiftUI.Text&gt; in ai_clean_space.AICleanerDuplicateContactsView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ContactView/AICleanerDuplicateContactsView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "126"
-                  endingLineNumber = "126">
-               </Location>
-               <Location
                   uuid = "57B25E0E-00A4-47BB-8F52-7B91CCA605F8 - 908265cb8b302ec5"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -437,34 +297,6 @@
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
-               <Location
-                  uuid = "10D68D4C-6385-4328-9C39-8B14AB7B3398 - 7af688702bd604c4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; SwiftUI.Button&lt;SwiftUI.Text&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of static SwiftUI.ToolbarContentBuilder.buildBlock&lt;&#x3c4;_0_0, &#x3c4;_0_1 where &#x3c4;_0_0: SwiftUI.ToolbarContent, &#x3c4;_0_1: SwiftUI.ToolbarContent&gt;(&#x3c4;_0_0, &#x3c4;_0_1) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in ai_clean_space.VideoPlayerView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/AdditionalViews/VideosView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "569"
-                  endingLineNumber = "569">
-               </Location>
-               <Location
-                  uuid = "10D68D4C-6385-4328-9C39-8B14AB7B3398 - 30a1fc93ce759289"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 () -&gt; SwiftUI.Button&lt;SwiftUI.Text&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of static SwiftUI.ToolbarContentBuilder.buildBlock&lt;&#x3c4;_0_0, &#x3c4;_0_1 where &#x3c4;_0_0: SwiftUI.ToolbarContent, &#x3c4;_0_1: SwiftUI.ToolbarContent&gt;(&#x3c4;_0_0, &#x3c4;_0_1) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in ai_clean_space.VideoPlayerView.body.getter : some"
-                  moduleName = "ai-clean-space.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/AdditionalViews/VideosView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "570"
-                  endingLineNumber = "570">
-               </Location>
                <Location
                   uuid = "10D68D4C-6385-4328-9C39-8B14AB7B3398 - 19a93b4288b6cf3a"
                   shouldBeEnabled = "Yes"
