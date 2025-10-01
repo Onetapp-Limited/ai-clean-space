@@ -3,33 +3,32 @@ import PhotosUI
 
 @available(iOS 16.0, *)
 struct PhotosView: View {
-    @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var safeStorageManager: SafeStorageManager
-    @State private var searchText: String = ""
-    @State private var isSelectionMode: Bool = false
-    @State private var selectedPhotos: Set<UUID> = []
-    @FocusState private var isSearchFocused: Bool
-    @State private var selectedPickerItems: [PhotosPickerItem] = []
-    @State private var showImagePicker = false
-    @State private var isLoadingImages = false
+    @Environment(\.dismiss) private var flowDismissal
+    @EnvironmentObject private var dataVaultManager: SafeStorageManager
     
-    @State private var showDeleteConfirmation = false
+    @State private var inputSearchText: String = ""
+    @State private var isSelectionActive: Bool = false
+    @State private var currentSelectionIDs: Set<UUID> = []
+    @FocusState private var isSearchFieldFocused: Bool
+    @State private var itemsToImport: [PhotosPickerItem] = []
+    @State private var isProcessingImages: Bool = false
+    @State private var isShowingDeleteDialog: Bool = false
     
-    private var photos: [SafePhotoData] {
-        safeStorageManager.loadAllPhotos()
+    private var fetchedMediaData: [SafePhotoData] {
+        dataVaultManager.loadAllPhotos()
     }
     
     var body: some View {
         GeometryReader { geometry in
-            let scalingFactor = geometry.size.height / 844
+            let scaleRatio = geometry.size.height / 844
             
             VStack(spacing: 0) {
-                headerView(scalingFactor: scalingFactor)
+                buildNavigationView(scaleRatio: scaleRatio)
                 
-                if photos.isEmpty {
-                    emptyStateView(scalingFactor: scalingFactor)
+                if fetchedMediaData.isEmpty {
+                    buildEmptyStateView(scaleRatio: scaleRatio)
                 } else {
-                    photosContentView(scalingFactor: scalingFactor)
+                    buildContentDisplay(scaleRatio: scaleRatio)
                 }
             }
         }
@@ -38,33 +37,33 @@ struct PhotosView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             // Dismiss keyboard when tapping outside
-            isSearchFocused = false
+            isSearchFieldFocused = false
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
-        .onChange(of: selectedPickerItems) { items in
-            loadImages(from: items)
+        .onChange(of: itemsToImport) { newItems in
+            startImageImportProcess(from: newItems)
         }
-        .confirmationDialog("Delete Photos", isPresented: $showDeleteConfirmation) {
-            Button("Delete \(selectedPhotos.count) Photos", role: .destructive) {
-                deleteSelectedPhotos()
+        .confirmationDialog("Delete Photos", isPresented: $isShowingDeleteDialog) {
+            Button("Delete \(currentSelectionIDs.count) Photos", role: .destructive) {
+                executeDeletion()
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("Are you sure you want to delete \(selectedPhotos.count) selected photos? This action cannot be undone.")
+            Text("Are you sure you want to delete \(currentSelectionIDs.count) selected photos? This action cannot be undone.")
         }
     }
     
-    // MARK: - Header
-    private func headerView(scalingFactor: CGFloat) -> some View {
+    // MARK: - Navigation Bar
+    private func buildNavigationView(scaleRatio: CGFloat) -> some View {
         HStack {
             Button(action: {
-                dismiss()
+                flowDismissal()
             }) {
-                HStack(spacing: 4 * scalingFactor) {
+                HStack(spacing: 4 * scaleRatio) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 16 * scalingFactor, weight: .medium))
+                        .font(.system(size: 16 * scaleRatio, weight: .medium))
                     Text("Media")
-                        .font(.system(size: 16 * scalingFactor))
+                        .font(.system(size: 16 * scaleRatio))
                 }
                 .foregroundColor(CMColor.primary)
             }
@@ -72,162 +71,164 @@ struct PhotosView: View {
             Spacer()
             
             Text("Photos")
-                .font(.system(size: 17 * scalingFactor, weight: .semibold))
+                .font(.system(size: 17 * scaleRatio, weight: .semibold))
                 .foregroundColor(CMColor.primaryText)
             
             Spacer()
             
-            if !photos.isEmpty {
+            if !fetchedMediaData.isEmpty {
                 Button(action: {
-                    isSelectionMode.toggle()
-                    if !isSelectionMode {
-                        selectedPhotos.removeAll()
+                    isSelectionActive.toggle()
+                    if !isSelectionActive {
+                        currentSelectionIDs.removeAll()
                     }
                 }) {
-                    HStack(spacing: 4 * scalingFactor) {
+                    HStack(spacing: 4 * scaleRatio) {
                         Circle()
                             .fill(CMColor.primary)
-                            .frame(width: 6 * scalingFactor, height: 6 * scalingFactor)
-                        Text("Select")
-                            .font(.system(size: 16 * scalingFactor))
+                            .frame(width: 6 * scaleRatio, height: 6 * scaleRatio)
+                        Text(isSelectionActive ? "Cancel" : "Select")
+                            .font(.system(size: 16 * scaleRatio))
                             .foregroundColor(CMColor.primary)
                     }
                 }
             } else {
-                Spacer().frame(width: 60 * scalingFactor)
+                Spacer().frame(width: 60 * scaleRatio)
             }
         }
-        .padding(.horizontal, 16 * scalingFactor)
-        .padding(.vertical, 12 * scalingFactor)
+        .padding(.horizontal, 16 * scaleRatio)
+        .padding(.vertical, 12 * scaleRatio)
     }
     
     // MARK: - Empty State
-    private func emptyStateView(scalingFactor: CGFloat) -> some View {
-        VStack(spacing: 24 * scalingFactor) {
+    private func buildEmptyStateView(scaleRatio: CGFloat) -> some View {
+        VStack(spacing: 24 * scaleRatio) {
             Spacer()
             
             ZStack {
                 Circle()
                     .fill(CMColor.backgroundSecondary)
-                    .frame(width: 120 * scalingFactor, height: 120 * scalingFactor)
+                    .frame(width: 120 * scaleRatio, height: 120 * scaleRatio)
                 
                 Image(systemName: "photo.fill")
-                    .font(.system(size: 48 * scalingFactor))
+                    .font(.system(size: 48 * scaleRatio))
                     .foregroundColor(CMColor.secondaryText)
             }
             
-            VStack(spacing: 8 * scalingFactor) {
+            VStack(spacing: 8 * scaleRatio) {
                 Text("No photos yet")
-                    .font(.system(size: 20 * scalingFactor, weight: .semibold))
+                    .font(.system(size: 20 * scaleRatio, weight: .semibold))
                     .foregroundColor(CMColor.primaryText)
                 
                 Text("Add your first photo to get started")
-                    .font(.system(size: 16 * scalingFactor))
+                    .font(.system(size: 16 * scaleRatio))
                     .foregroundColor(CMColor.secondaryText)
                     .multilineTextAlignment(.center)
             }
             
-            PhotosPicker(selection: $selectedPickerItems, maxSelectionCount: 10, matching: .images) {
-                HStack(spacing: 8 * scalingFactor) {
+            PhotosPicker(selection: $itemsToImport, maxSelectionCount: 10, matching: .images) {
+                HStack(spacing: 8 * scaleRatio) {
                     Image(systemName: "plus")
-                        .font(.system(size: 16 * scalingFactor, weight: .medium))
+                        .font(.system(size: 16 * scaleRatio, weight: .medium))
                     
                     Text("Add photo")
-                        .font(.system(size: 16 * scalingFactor, weight: .semibold))
+                        .font(.system(size: 16 * scaleRatio, weight: .semibold))
                 }
                 .foregroundColor(CMColor.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 50 * scalingFactor)
+                .frame(height: 50 * scaleRatio)
                 .background(CMColor.primaryGradient)
-                .cornerRadius(25 * scalingFactor)
+                .cornerRadius(25 * scaleRatio)
             }
-            .padding(.horizontal, 40 * scalingFactor)
+            .padding(.horizontal, 40 * scaleRatio)
             
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    private func photosContentView(scalingFactor: CGFloat) -> some View {
+    private func buildContentDisplay(scaleRatio: CGFloat) -> some View {
         ScrollView(.vertical, showsIndicators: false) {
-            LazyVStack(spacing: 24 * scalingFactor) {
-                searchBar(scalingFactor: scalingFactor)
+            LazyVStack(spacing: 24 * scaleRatio) {
+                // В оригинале здесь был searchBar, оставляем его, но убираем фильтрацию
+                createSearchInput(scaleRatio: scaleRatio)
                 
-                if !isSearchFocused || !searchText.isEmpty {
-                    photosSectionsView(scalingFactor: scalingFactor)
+                if !isSearchFieldFocused || !inputSearchText.isEmpty {
+                    // Используем исходную логику (без фильтрации, как в оригинале)
+                    generatePhotoSections(scaleRatio: scaleRatio)
                         .transition(.opacity.combined(with: .move(edge: .top)))
                     
-                    addImageButton(scalingFactor: scalingFactor)
+                    generateActionButtons(scaleRatio: scaleRatio)
                         .transition(.opacity.combined(with: .move(edge: .top)))
                 }
                 
-                Spacer(minLength: isSearchFocused ? 200 * scalingFactor : 100 * scalingFactor)
+                Spacer(minLength: isSearchFieldFocused ? 200 * scaleRatio : 100 * scaleRatio)
             }
-            .padding(.horizontal, 16 * scalingFactor)
-            .padding(.top, 20 * scalingFactor)
-            .animation(.easeInOut(duration: 0.3), value: isSearchFocused)
+            .padding(.horizontal, 16 * scaleRatio)
+            .padding(.top, 20 * scaleRatio)
+            .animation(.easeInOut(duration: 0.3), value: isSearchFieldFocused)
         }
     }
     
-    private func searchBar(scalingFactor: CGFloat) -> some View {
-        HStack(spacing: 12 * scalingFactor) {
-            HStack(spacing: 8 * scalingFactor) {
-                TextField("Search", text: $searchText)
-                    .font(.system(size: 16 * scalingFactor))
+    private func createSearchInput(scaleRatio: CGFloat) -> some View {
+        HStack(spacing: 12 * scaleRatio) {
+            HStack(spacing: 8 * scaleRatio) {
+                TextField("Search", text: $inputSearchText)
+                    .font(.system(size: 16 * scaleRatio))
                     .foregroundColor(CMColor.primaryText)
-                    .focused($isSearchFocused)
+                    .focused($isSearchFieldFocused)
                     .submitLabel(.search)
                     .onSubmit {
-                        isSearchFocused = false
+                        isSearchFieldFocused = false
                     }
                 
                 Spacer()
                 
-                if isSearchFocused && !searchText.isEmpty {
+                if isSearchFieldFocused && !inputSearchText.isEmpty {
                     Button(action: {
-                        searchText = ""
+                        inputSearchText = ""
                     }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(CMColor.secondaryText)
-                            .font(.system(size: 16 * scalingFactor))
+                            .font(.system(size: 16 * scaleRatio))
                     }
                 } else {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(CMColor.secondaryText)
-                        .font(.system(size: 16 * scalingFactor))
+                        .font(.system(size: 16 * scaleRatio))
                 }
             }
-            .padding(.horizontal, 16 * scalingFactor)
-            .padding(.vertical, 12 * scalingFactor)
+            .padding(.horizontal, 16 * scaleRatio)
+            .padding(.vertical, 12 * scaleRatio)
             .background(CMColor.surface)
-            .cornerRadius(12 * scalingFactor)
+            .cornerRadius(12 * scaleRatio)
             .overlay(
-                RoundedRectangle(cornerRadius: 12 * scalingFactor)
-                    .stroke(isSearchFocused ? CMColor.primary.opacity(0.3) : CMColor.border, lineWidth: 1)
+                RoundedRectangle(cornerRadius: 12 * scaleRatio)
+                    .stroke(isSearchFieldFocused ? CMColor.primary.opacity(0.3) : CMColor.border, lineWidth: 1)
             )
-            .animation(.easeInOut(duration: 0.2), value: isSearchFocused)
+            .animation(.easeInOut(duration: 0.2), value: isSearchFieldFocused)
         }
     }
     
-    private func photosSectionsView(scalingFactor: CGFloat) -> some View {
-        let groupedPhotos = Dictionary(grouping: photos) { photo in
-            formatDate(photo.dateAdded)
+    private func generatePhotoSections(scaleRatio: CGFloat) -> some View {
+        let groupedPhotos = Dictionary(grouping: fetchedMediaData) { photo in
+            formatPhotoTimestamp(photo.dateAdded)
         }
         
-        return LazyVStack(alignment: .leading, spacing: 16 * scalingFactor) {
+        return LazyVStack(alignment: .leading, spacing: 16 * scaleRatio) {
             ForEach(groupedPhotos.keys.sorted(by: { first, second in
                 if first == "Today" { return true }
                 if second == "Today" { return false }
                 return first < second
             }), id: \.self) { dateKey in
-                VStack(alignment: .leading, spacing: 12 * scalingFactor) {
+                VStack(alignment: .leading, spacing: 12 * scaleRatio) {
                     Text(dateKey)
-                        .font(.system(size: 18 * scalingFactor, weight: .semibold))
+                        .font(.system(size: 18 * scaleRatio, weight: .semibold))
                         .foregroundColor(CMColor.primaryText)
                     
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8 * scalingFactor), count: 3), spacing: 8 * scalingFactor) {
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8 * scaleRatio), count: 3), spacing: 8 * scaleRatio) {
                         ForEach(groupedPhotos[dateKey] ?? []) { photo in
-                            photoThumbnail(photo: photo, scalingFactor: scalingFactor)
+                            createPhotoCell(photo: photo, scaleRatio: scaleRatio)
                         }
                     }
                 }
@@ -235,115 +236,113 @@ struct PhotosView: View {
         }
     }
     
-    private func photoThumbnail(photo: SafePhotoData, scalingFactor: CGFloat) -> some View {
+    private func createPhotoCell(photo: SafePhotoData, scaleRatio: CGFloat) -> some View {
         NavigationLink(destination: PhotoDetailView(photo: photo)) {
             ZStack {
-                // Photo
                 if let uiImage = photo.fullImage {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: (UIScreen.main.bounds.width - 48 * scalingFactor) / 3, height: (UIScreen.main.bounds.width - 48 * scalingFactor) / 3)
+                        .frame(width: (UIScreen.main.bounds.width - 48 * scaleRatio) / 3, height: (UIScreen.main.bounds.width - 48 * scaleRatio) / 3)
                         .clipped()
-                        .cornerRadius(12 * scalingFactor)
+                        .cornerRadius(12 * scaleRatio)
                 } else {
                     Rectangle()
                         .fill(CMColor.secondaryText.opacity(0.3))
-                        .frame(width: (UIScreen.main.bounds.width - 48 * scalingFactor) / 3, height: (UIScreen.main.bounds.width - 48 * scalingFactor) / 3)
-                        .cornerRadius(12 * scalingFactor)
+                        .frame(width: (UIScreen.main.bounds.width - 48 * scaleRatio) / 3, height: (UIScreen.main.bounds.width - 48 * scaleRatio) / 3)
+                        .cornerRadius(12 * scaleRatio)
                         .overlay(
                             Image(systemName: "photo")
-                                .font(.system(size: 24 * scalingFactor))
+                                .font(.system(size: 24 * scaleRatio))
                                 .foregroundColor(CMColor.secondaryText)
                         )
                 }
-            
-                if isSelectionMode {
+                
+                if isSelectionActive {
                     VStack {
                         HStack {
                             Spacer()
                             Button(action: {
-                                if selectedPhotos.contains(photo.id) {
-                                    selectedPhotos.remove(photo.id)
+                                if currentSelectionIDs.contains(photo.id) {
+                                    currentSelectionIDs.remove(photo.id)
                                 } else {
-                                    selectedPhotos.insert(photo.id)
+                                    currentSelectionIDs.insert(photo.id)
                                 }
                             }) {
-                                Image(systemName: selectedPhotos.contains(photo.id) ? "checkmark.circle.fill" : "circle")
-                                    .font(.system(size: 20 * scalingFactor))
-                                    .foregroundColor(selectedPhotos.contains(photo.id) ? .white : .white.opacity(0.7))
+                                Image(systemName: currentSelectionIDs.contains(photo.id) ? "checkmark.circle.fill" : "circle")
+                                    .font(.system(size: 20 * scaleRatio))
+                                    .foregroundColor(currentSelectionIDs.contains(photo.id) ? .white : .white.opacity(0.7))
                                     .background(
                                         Circle()
-                                            .fill(selectedPhotos.contains(photo.id) ? CMColor.primary : Color.black.opacity(0.3))
-                                            .frame(width: 24 * scalingFactor, height: 24 * scalingFactor)
+                                            .fill(currentSelectionIDs.contains(photo.id) ? CMColor.primary : Color.black.opacity(0.3))
+                                            .frame(width: 24 * scaleRatio, height: 24 * scaleRatio)
                                     )
                             }
-                            .padding(8 * scalingFactor)
+                            .padding(8 * scaleRatio)
                         }
                         Spacer()
                     }
                 }
             }
         }
-        .disabled(isSelectionMode)
+        .disabled(isSelectionActive)
     }
     
-    // MARK: - Add Image Button
-    private func addImageButton(scalingFactor: CGFloat) -> some View {
-        VStack(spacing: 12 * scalingFactor) {
-            if isLoadingImages {
-                HStack(spacing: 8 * scalingFactor) {
+    private func generateActionButtons(scaleRatio: CGFloat) -> some View {
+        VStack(spacing: 12 * scaleRatio) {
+            if isProcessingImages {
+                HStack(spacing: 8 * scaleRatio) {
                     ProgressView()
                         .scaleEffect(0.8)
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     
                     Text("Adding images...")
-                        .font(.system(size: 16 * scalingFactor, weight: .medium))
+                        .font(.system(size: 16 * scaleRatio, weight: .medium))
                         .foregroundColor(.white)
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: 52 * scalingFactor)
+                .frame(height: 52 * scaleRatio)
                 .background(CMColor.primary.opacity(0.7))
-                .cornerRadius(16 * scalingFactor)
+                .cornerRadius(16 * scaleRatio)
             } else {
-                PhotosPicker(selection: $selectedPickerItems, maxSelectionCount: 10, matching: .images) {
+                PhotosPicker(selection: $itemsToImport, maxSelectionCount: 10, matching: .images) {
                     Text("Add image")
-                        .font(.system(size: 16 * scalingFactor, weight: .medium))
+                        .font(.system(size: 16 * scaleRatio, weight: .medium))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .frame(height: 52 * scalingFactor)
+                        .frame(height: 52 * scaleRatio)
                         .background(CMColor.primary)
-                        .cornerRadius(16 * scalingFactor)
+                        .cornerRadius(16 * scaleRatio)
                 }
-                .disabled(isLoadingImages)
+                .disabled(isProcessingImages)
             }
             
-            if isSelectionMode && !selectedPhotos.isEmpty {
+            if isSelectionActive && !currentSelectionIDs.isEmpty {
                 Button(action: {
-                    showDeleteConfirmation = true
+                    isShowingDeleteDialog = true
                 }) {
-                    HStack(spacing: 8 * scalingFactor) {
+                    HStack(spacing: 8 * scaleRatio) {
                         Image(systemName: "trash")
-                            .font(.system(size: 16 * scalingFactor, weight: .medium))
+                            .font(.system(size: 16 * scaleRatio, weight: .medium))
                         
-                        Text("Delete Selected (\(selectedPhotos.count))")
-                            .font(.system(size: 16 * scalingFactor, weight: .medium))
+                        Text("Delete Selected (\(currentSelectionIDs.count))")
+                            .font(.system(size: 16 * scaleRatio, weight: .medium))
                     }
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 52 * scalingFactor)
+                    .frame(height: 52 * scaleRatio)
                     .background(Color.red)
-                    .cornerRadius(16 * scalingFactor)
+                    .cornerRadius(16 * scaleRatio)
                 }
-                .disabled(isLoadingImages)
+                .disabled(isProcessingImages)
             }
         }
-        .padding(.top, 20 * scalingFactor)
-        .animation(.easeInOut(duration: 0.2), value: isLoadingImages)
+        .padding(.top, 20 * scaleRatio)
+        .animation(.easeInOut(duration: 0.2), value: isProcessingImages)
     }
-    
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
+        
+    private func formatPhotoTimestamp(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
         let calendar = Calendar.current
         
         if calendar.isDateInToday(date) {
@@ -351,44 +350,43 @@ struct PhotosView: View {
         } else if calendar.isDateInYesterday(date) {
             return "Yesterday"
         } else {
-            formatter.dateFormat = "d MMM yyyy"
-            return formatter.string(from: date)
+            dateFormatter.dateFormat = "d MMM yyyy"
+            return dateFormatter.string(from: date)
         }
     }
     
-    private func loadImages(from items: [PhotosPickerItem]) {
+    private func startImageImportProcess(from items: [PhotosPickerItem]) {
         guard !items.isEmpty else { return }
         
-        isLoadingImages = true
+        isProcessingImages = true
         
         Task {
             defer {
                 DispatchQueue.main.async {
-                    self.isLoadingImages = false
-                    self.selectedPickerItems.removeAll()
+                    self.isProcessingImages = false
+                    self.itemsToImport.removeAll()
                 }
             }
             
-            for (index, item) in items.enumerated() {
+            for item in items {
                 if let data = try? await item.loadTransferable(type: Data.self) {
-                    let savedPhoto = await self.safeStorageManager.savePhotoAsync(imageData: data)
+                    let _ = await self.dataVaultManager.savePhotoAsync(imageData: data)
                     
                     await MainActor.run {
-                        self.safeStorageManager.objectWillChange.send()
+                        self.dataVaultManager.objectWillChange.send()
                     }
                 }
             }
         }
     }
     
-    private func deleteSelectedPhotos() {
-        let photosToDelete = photos.filter { photo in
-            selectedPhotos.contains(photo.id)
+    private func executeDeletion() {
+        let itemsForDeletion = fetchedMediaData.filter { photo in
+            currentSelectionIDs.contains(photo.id)
         }
         
-        safeStorageManager.deletePhotos(photosToDelete)
-        selectedPhotos.removeAll()
-        isSelectionMode = false
+        dataVaultManager.deletePhotos(itemsForDeletion)
+        currentSelectionIDs.removeAll()
+        isSelectionActive = false
     }
 }
-
