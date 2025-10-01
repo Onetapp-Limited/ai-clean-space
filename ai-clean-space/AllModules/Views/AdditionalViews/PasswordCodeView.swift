@@ -79,27 +79,15 @@ struct PINView: View {
                     .buttonStyle(PlainButtonStyle())
                     
                     Spacer()
-                    
-                    Text(headerTitle)
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(CMColor.primaryText)
-                    
-                    Spacer()
-                    
-                    // Invisible button for alignment
-                    Button(action: {}) {
-                        HStack(spacing: 6 * scalingFactor) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 17, weight: .semibold))
-                            Text("Back")
-                                .font(.system(size: 17, weight: .regular))
-                        }
-                    }
-                    .opacity(0)
                 }
                 .padding(.horizontal, 16 * scalingFactor)
-                .padding(.top, 50 * scalingFactor)
+                .padding(.top, 30 * scalingFactor)
                 
+                Text(headerTitle)
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(CMColor.primaryText)
+                    .padding(.top, 20 * scalingFactor)
+
                 // MARK: - Description Text
                 Text(screenDescription)
                     .font(.system(size: 16, weight: .regular))
