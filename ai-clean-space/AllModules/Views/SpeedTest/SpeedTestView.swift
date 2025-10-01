@@ -309,7 +309,7 @@ struct SpeedTestView: View {
             Path { path in
                 let width: CGFloat = UIScreen.main.bounds.width - 64 * scalingFactor
                 let height: CGFloat = 150 * scalingFactor
-                let normalizedSpeed = min(speed / 100.0, 1.0)
+                let normalizedSpeed = min(speed / 40.0, 1.0)
                 
                 let points = createSpeedPoints(width: width, height: height, maxSpeed: normalizedSpeed, isUpload: isUpload)
                 
@@ -339,7 +339,7 @@ struct SpeedTestView: View {
             Path { path in
                 let width: CGFloat = UIScreen.main.bounds.width - 64 * scalingFactor
                 let height: CGFloat = 150 * scalingFactor
-                let normalizedSpeed = min(speed / 100.0, 1.0)
+                let normalizedSpeed = min(speed / 40.0, 1.0)
                 
                 let points = createSpeedPoints(width: width, height: height, maxSpeed: normalizedSpeed, isUpload: isUpload)
                 
