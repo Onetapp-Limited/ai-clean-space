@@ -63,6 +63,34 @@
                   startingLineNumber = "14"
                   endingLineNumber = "14">
                </Location>
+               <Location
+                  uuid = "3A997F42-BB0D-40B2-81D4-E1443897E05B - 8aab47c4f3a3b605"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ai_clean_space.AICleanerContactCardWithCustomNavView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ContactView/AICleanerContactCardWithCustomNavView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "12"
+                  endingLineNumber = "12">
+               </Location>
+               <Location
+                  uuid = "3A997F42-BB0D-40B2-81D4-E1443897E05B - 474938c6daa75335"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.overlay&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(_: &#x3c4;_1_0, alignment: SwiftUI.Alignment) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.navigationBarHidden(Swift.Bool) -&gt; some&gt;&gt;.0)&gt; in ai_clean_space.AICleanerContactCardWithCustomNavView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ContactView/AICleanerContactCardWithCustomNavView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -109,6 +137,34 @@
                   startingLineNumber = "9"
                   endingLineNumber = "9">
                </Location>
+               <Location
+                  uuid = "36EC36CD-A5E0-4FDA-8C7B-74C354BE91F5 - d4fe8a6fb9be43ed"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ai_clean_space.ContactDetailSheetView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ContactView/ContactDetailSheetView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "8"
+                  endingLineNumber = "8">
+               </Location>
+               <Location
+                  uuid = "36EC36CD-A5E0-4FDA-8C7B-74C354BE91F5 - 779fceeb58f632c8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in ai_clean_space.ContactDetailSheetView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ContactView/ContactDetailSheetView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9"
+                  endingLineNumber = "9">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -150,6 +206,34 @@
                   moduleName = "ai-clean-space.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/ContactView/AICleanerSelectableSystemContactRowView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "15"
+                  endingLineNumber = "15">
+               </Location>
+               <Location
+                  uuid = "DD237577-D20A-49DE-A440-01DEDAD93857 - c2352460ab8083b6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ai_clean_space.AICleanerSelectableSystemContactRowView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ContactView/AICleanerSelectableSystemContactRowView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14">
+               </Location>
+               <Location
+                  uuid = "DD237577-D20A-49DE-A440-01DEDAD93857 - 2874bc2304f7e5e3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.contentShape&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.Shape&gt;(_: &#x3c4;_1_0, eoFill: Swift.Bool) -&gt; some&gt;&gt;.0 in ai_clean_space.AICleanerSelectableSystemContactRowView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ContactView/AICleanerSelectableSystemContactRowView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "15"
@@ -217,6 +301,34 @@
                   startingLineNumber = "23"
                   endingLineNumber = "23">
                </Location>
+               <Location
+                  uuid = "091058B4-546B-4D80-811E-848C7B00B407 - cd581c63b157fb2c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ai_clean_space.SimilarityPhotoDetailView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ScanView/Screens/PhotoPreviewDetailView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "21"
+                  endingLineNumber = "21">
+               </Location>
+               <Location
+                  uuid = "091058B4-546B-4D80-811E-848C7B00B407 - 9129bc8e5eecc34f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.background&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ShapeStyle&gt;(_: &#x3c4;_1_0, ignoresSafeAreaEdges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0, SwiftUI.GeometryReader&lt;&lt;&lt;opaque return type of SwiftUI.View.background&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ShapeStyle&gt;(_: &#x3c4;_1_0, ignoresSafeAreaEdges: SwiftUI.Edge.Set) -&gt; some&gt;&gt;.0&gt;, &lt;&lt;opaque return type of SwiftUI.View.animation&lt;&#x3c4;_0_0 where &#x3c4;_1_0: Swift.Equatable&gt;(_: Swift.Optional&lt;SwiftUI.Animation&gt;, value: &#x3c4;_1_0) -&gt; some&gt;&gt;.0)&gt; in ai_clean_space.SimilarityPhotoDetailView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ScanView/Screens/PhotoPreviewDetailView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -279,6 +391,34 @@
                   startingLineNumber = "126"
                   endingLineNumber = "126">
                </Location>
+               <Location
+                  uuid = "57B25E0E-00A4-47BB-8F52-7B91CCA605F8 - 908265cb8b302ec5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #4 () -&gt; SwiftUI.Button&lt;SwiftUI.Text&gt; in ai_clean_space.AICleanerDuplicateContactsView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ContactView/AICleanerDuplicateContactsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "125"
+                  endingLineNumber = "125">
+               </Location>
+               <Location
+                  uuid = "57B25E0E-00A4-47BB-8F52-7B91CCA605F8 - 2aff996fe49381bc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #4 () -&gt; SwiftUI.Button&lt;SwiftUI.Text&gt; in ai_clean_space.AICleanerDuplicateContactsView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/ContactView/AICleanerDuplicateContactsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "126"
+                  endingLineNumber = "126">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -320,6 +460,34 @@
                   moduleName = "ai-clean-space.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/mikita/Documents/ai-clean-space/ai-clean-space/AllModules/Views/AdditionalViews/VideosView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "570"
+                  endingLineNumber = "570">
+               </Location>
+               <Location
+                  uuid = "10D68D4C-6385-4328-9C39-8B14AB7B3398 - 19a93b4288b6cf3a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI.Button&lt;SwiftUI.Text&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of static SwiftUI.ToolbarContentBuilder.buildBlock&lt;&#x3c4;_0_0, &#x3c4;_0_1 where &#x3c4;_0_0: SwiftUI.ToolbarContent, &#x3c4;_0_1: SwiftUI.ToolbarContent&gt;(&#x3c4;_0_0, &#x3c4;_0_1) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in ai_clean_space.VideoPlayerView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/AdditionalViews/VideosView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "569"
+                  endingLineNumber = "569">
+               </Location>
+               <Location
+                  uuid = "10D68D4C-6385-4328-9C39-8B14AB7B3398 - 53fe4fa16d15592b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 () -&gt; SwiftUI.Button&lt;SwiftUI.Text&gt; in closure #1 () -&gt; &lt;&lt;opaque return type of static SwiftUI.ToolbarContentBuilder.buildBlock&lt;&#x3c4;_0_0, &#x3c4;_0_1 where &#x3c4;_0_0: SwiftUI.ToolbarContent, &#x3c4;_0_1: SwiftUI.ToolbarContent&gt;(&#x3c4;_0_0, &#x3c4;_0_1) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; &lt;&lt;opaque return type of SwiftUI.View.toolbar&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.ToolbarContent&gt;(content: () -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in ai_clean_space.VideoPlayerView.body.getter : some"
+                  moduleName = "ai-clean-space.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mikita/Documents/ai-clean-space-2/ai-clean-space-2/ai-clean-space/AllModules/Views/AdditionalViews/VideosView.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "570"
