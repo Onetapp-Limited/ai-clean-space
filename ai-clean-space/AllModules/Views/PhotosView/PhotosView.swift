@@ -237,19 +237,22 @@ struct PhotosView: View {
     }
     
     private func createPhotoCell(photo: SafePhotoData, scaleRatio: CGFloat) -> some View {
-        NavigationLink(destination: PhotoDetailView(photo: photo)) {
+        let cellDimension = (UIScreen.main.bounds.width - 48 * scaleRatio) / 3
+
+        return NavigationLink(destination: PhotoDetailView(photo: photo)) {
             ZStack {
+                // Photo Content
                 if let uiImage = photo.fullImage {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: (UIScreen.main.bounds.width - 48 * scaleRatio) / 3, height: (UIScreen.main.bounds.width - 48 * scaleRatio) / 3)
+                        .frame(width: cellDimension, height: cellDimension)
                         .clipped()
                         .cornerRadius(12 * scaleRatio)
                 } else {
                     Rectangle()
                         .fill(CMColor.secondaryText.opacity(0.3))
-                        .frame(width: (UIScreen.main.bounds.width - 48 * scaleRatio) / 3, height: (UIScreen.main.bounds.width - 48 * scaleRatio) / 3)
+                        .frame(width: cellDimension, height: cellDimension)
                         .cornerRadius(12 * scaleRatio)
                         .overlay(
                             Image(systemName: "photo")
@@ -258,11 +261,14 @@ struct PhotosView: View {
                         )
                 }
                 
+                // Selection Overlay (Кнопка выделения)
                 if isSelectionActive {
                     VStack {
                         HStack {
                             Spacer()
+                            // ВАЖНО: Мы используем Button, чтобы перехватить тап
                             Button(action: {
+                                // Логика выделения
                                 if currentSelectionIDs.contains(photo.id) {
                                     currentSelectionIDs.remove(photo.id)
                                 } else {
@@ -278,6 +284,9 @@ struct PhotosView: View {
                                             .frame(width: 24 * scaleRatio, height: 24 * scaleRatio)
                                     )
                             }
+                            // Модификатор, который не позволит NavigationLink сработать от тапа по кнопке
+                            .buttonStyle(PlainButtonStyle())
+                            .contentShape(Circle())
                             .padding(8 * scaleRatio)
                         }
                         Spacer()
@@ -285,7 +294,6 @@ struct PhotosView: View {
                 }
             }
         }
-        .disabled(isSelectionActive)
     }
     
     private func generateActionButtons(scaleRatio: CGFloat) -> some View {
