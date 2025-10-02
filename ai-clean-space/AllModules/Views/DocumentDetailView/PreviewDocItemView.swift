@@ -1,7 +1,7 @@
 import QuickLook
 import SwiftUI
 
-class DocumentPreviewItem: NSObject, QLPreviewItem {
+class PreviewDocItemView: NSObject, QLPreviewItem {
     let fileURL: URL
     
     init(url: URL) {

@@ -36,7 +36,7 @@ struct DocumentQuickLookView: UIViewControllerRepresentable {
         }
         
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            DocumentPreviewItem(url: parent.url)
+            PreviewDocItemView(url: parent.url)
         }
         
         func previewController(_ controller: QLPreviewController, shouldOpen url: URL, for item: QLPreviewItem) -> Bool {

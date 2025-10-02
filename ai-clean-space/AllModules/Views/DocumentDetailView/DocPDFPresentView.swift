@@ -4,12 +4,12 @@ import PDFKit
 import WebKit
 import Foundation
 
-struct PDFViewRepresentable: UIViewRepresentable {
-    let document: PDFDocument
+struct DocPDFPresentView: UIViewRepresentable {
+    let pdfDocument: PDFDocument
     
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()
-        pdfView.document = document
+        pdfView.document = pdfDocument
         pdfView.autoScales = true
         pdfView.displayMode = .singlePageContinuous
         pdfView.displayDirection = .vertical

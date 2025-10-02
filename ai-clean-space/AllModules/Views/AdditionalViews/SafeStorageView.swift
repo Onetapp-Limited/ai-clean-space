@@ -129,7 +129,7 @@ struct SafeStorageView: View {
             AICleanerSafeContactsView()
         }
         .fullScreenCover(isPresented: $showDocumentsView) {
-            DocumentsView()
+            DocListView()
                 .environmentObject(safeStorageManager)
         }
     }

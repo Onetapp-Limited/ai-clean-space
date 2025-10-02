@@ -19,16 +19,14 @@ struct SecuredQuickLookView: UIViewControllerRepresentable {
         uiViewController.refreshCurrentPreviewItem()
     }
     
-    // Обновлен тип возвращаемого значения
-    func makeCoordinator() -> QuickLookCoordinator { // Переименовано PreviewCoordinator
+    func makeCoordinator() -> QuickLookCoordinator {
         QuickLookCoordinator(self)
     }
     
-    // Переименованный class Coordinator
-    class QuickLookCoordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate { // Переименовано PreviewCoordinator
-        var parent: SecuredQuickLookView // Обновлен тип
+    class QuickLookCoordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
+        var parent: SecuredQuickLookView
         
-        init(_ parent: SecuredQuickLookView) { // Обновлен тип
+        init(_ parent: SecuredQuickLookView) { 
             self.parent = parent
             super.init()
         }

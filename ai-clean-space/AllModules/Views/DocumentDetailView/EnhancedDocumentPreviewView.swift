@@ -6,48 +6,45 @@ import Foundation
 
 struct EnhancedDocumentPreviewView: View {
     let document: SafeDocumentData
-    @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var safeStorageManager: SafeStorageManager
+    @Environment(\.dismiss) private var p_dismiss
+    @EnvironmentObject private var p_storageManager: SafeStorageManager
     
-    @State private var documentContent: DocumentContent = .loading
-    @State private var showShareSheet = false
-    @State private var showDeleteAlert = false
-    @State private var isDeleting = false
+    @State private var p_documentContent: PreviewContent = .loading
+    @State private var p_showShareSheet = false
+    @State private var p_showDeleteAlert = false
+    @State private var p_isDeletionActive = false
     
-    private enum DocumentContent {
+    private enum PreviewContent {
         case loading
         case text(String)
         case pdf(PDFDocument)
         case image(UIImage)
-        case web(String) // HTML content
+        case web(String)
         case unsupported
         case error(String)
     }
     
     var body: some View {
-        // Route to specialized preview based on file type
         Group {
             if let fileExtension = document.fileExtension?.lowercased() {
                 switch fileExtension {
                 case "doc", "docx":
                     DocumentDetailView(document: document)
-                        .environmentObject(safeStorageManager)
+                        .environmentObject(p_storageManager)
                 case "jpg", "jpeg", "png", "gif", "bmp", "tiff", "heic", "heif":
                     DocImagePreviewView(document: document)
-                        .environmentObject(safeStorageManager)
+                        .environmentObject(p_storageManager)
                 default:
-                    // Fallback to original enhanced view for other types
-                    originalEnhancedView
+                    p_originalPreview
                 }
             } else {
-                // No extension - use original view
-                originalEnhancedView
+                p_originalPreview
             }
         }
     }
     
-    // MARK: - Original Enhanced View
-    private var originalEnhancedView: some View {
+    // MARK: - Core Preview
+    private var p_originalPreview: some View {
         GeometryReader { geometry in
             let scalingFactor = geometry.size.height / 844
             
@@ -56,23 +53,20 @@ struct EnhancedDocumentPreviewView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // Header
-                    headerView(scalingFactor: scalingFactor)
-                    
-                    // Content
-                    contentView(scalingFactor: scalingFactor)
+                    p_headerView(scalingFactor: scalingFactor)
+                    p_contentView(scalingFactor: scalingFactor)
                 }
             }
         }
         .onAppear {
-            loadDocumentContent()
+            p_loadContent()
         }
-        .sheet(isPresented: $showShareSheet) {
+        .sheet(isPresented: $p_showShareSheet) {
             ActivityView(activityItems: [document.documentURL])
         }
-        .alert("Delete Document", isPresented: $showDeleteAlert) {
+        .alert("Delete Document", isPresented: $p_showDeleteAlert) {
             Button("Delete", role: .destructive) {
-                deleteDocument()
+                p_deleteContent()
             }
             Button("Cancel", role: .cancel) { }
         } message: {
@@ -81,11 +75,10 @@ struct EnhancedDocumentPreviewView: View {
     }
     
     // MARK: - Header
-    private func headerView(scalingFactor: CGFloat) -> some View {
+    private func p_headerView(scalingFactor: CGFloat) -> some View {
         HStack {
-            // Back button
             Button(action: {
-                dismiss()
+                p_dismiss()
             }) {
                 HStack(spacing: 6 * scalingFactor) {
                     Image(systemName: "chevron.left")
@@ -98,7 +91,6 @@ struct EnhancedDocumentPreviewView: View {
             
             Spacer()
             
-            // Document title
             Text(document.displayName)
                 .font(.system(size: 17 * scalingFactor, weight: .semibold))
                 .foregroundColor(CMColor.primaryText)
@@ -107,11 +99,10 @@ struct EnhancedDocumentPreviewView: View {
             
             Spacer()
             
-            // Delete button
             Button(action: {
-                showDeleteAlert = true
+                p_showDeleteAlert = true
             }) {
-                if isDeleting {
+                if p_isDeletionActive {
                     ProgressView()
                         .scaleEffect(0.8)
                         .progressViewStyle(CircularProgressViewStyle(tint: CMColor.error))
@@ -121,7 +112,7 @@ struct EnhancedDocumentPreviewView: View {
                         .foregroundColor(CMColor.error)
                 }
             }
-            .disabled(isDeleting)
+            .disabled(p_isDeletionActive)
         }
         .padding(.horizontal, 16 * scalingFactor)
         .padding(.vertical, 12 * scalingFactor)
@@ -136,33 +127,33 @@ struct EnhancedDocumentPreviewView: View {
     
     // MARK: - Content View
     @ViewBuilder
-    private func contentView(scalingFactor: CGFloat) -> some View {
-        switch documentContent {
+    private func p_contentView(scalingFactor: CGFloat) -> some View {
+        switch p_documentContent {
         case .loading:
-            loadingView(scalingFactor: scalingFactor)
+            p_loadingScreen(scalingFactor: scalingFactor)
             
         case .text(let content):
-            documentTextView(content: content, scalingFactor: scalingFactor)
+            p_textPreview(content: content, scalingFactor: scalingFactor)
             
         case .pdf(let pdfDocument):
-            pdfDocumentView(pdfDocument: pdfDocument, scalingFactor: scalingFactor)
+            p_pdfPreview(pdfDocument: pdfDocument, scalingFactor: scalingFactor)
             
         case .image(let image):
-            documentImageView(image: image, scalingFactor: scalingFactor)
+            p_imagePreview(image: image, scalingFactor: scalingFactor)
             
         case .web(let htmlContent):
-            webDocumentView(htmlContent: htmlContent, scalingFactor: scalingFactor)
+            p_webPreview(htmlContent: htmlContent, scalingFactor: scalingFactor)
             
         case .unsupported:
-            unsupportedView(scalingFactor: scalingFactor)
+            p_unsupportedScreen(scalingFactor: scalingFactor)
             
         case .error(let errorMessage):
-            errorView(errorMessage: errorMessage, scalingFactor: scalingFactor)
+            p_errorScreen(errorMessage: errorMessage, scalingFactor: scalingFactor)
         }
     }
     
-    // MARK: - Loading View
-    private func loadingView(scalingFactor: CGFloat) -> some View {
+    // MARK: - Content Screens
+    private func p_loadingScreen(scalingFactor: CGFloat) -> some View {
         VStack(spacing: 16 * scalingFactor) {
             ProgressView()
                 .scaleEffect(1.2)
@@ -173,14 +164,11 @@ struct EnhancedDocumentPreviewView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    // MARK: - Document Text View
-    private func documentTextView(content: String, scalingFactor: CGFloat) -> some View {
+    private func p_textPreview(content: String, scalingFactor: CGFloat) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16 * scalingFactor) {
-                // Document header info
-                documentInfoCard(scalingFactor: scalingFactor)
+                p_infoCard(scalingFactor: scalingFactor)
                 
-                // Document content
                 VStack(alignment: .leading, spacing: 12 * scalingFactor) {
                     Text("Document Content")
                         .font(.system(size: 18 * scalingFactor, weight: .semibold))
@@ -200,35 +188,28 @@ struct EnhancedDocumentPreviewView: View {
                         )
                 }
                 
-                // Action buttons
-                actionButtonsView(scalingFactor: scalingFactor)
+                p_actionButtons(scalingFactor: scalingFactor)
             }
             .padding(.horizontal, 16 * scalingFactor)
             .padding(.vertical, 20 * scalingFactor)
         }
     }
     
-    // MARK: - PDF Document View
-    private func pdfDocumentView(pdfDocument: PDFDocument, scalingFactor: CGFloat) -> some View {
+    private func p_pdfPreview(pdfDocument: PDFDocument, scalingFactor: CGFloat) -> some View {
         VStack(spacing: 0) {
-            // Document info bar
-            documentInfoBar(scalingFactor: scalingFactor)
+            p_infoBar(scalingFactor: scalingFactor)
             
-            // PDF content
-            PDFViewRepresentable(document: pdfDocument)
+            DocPDFPresentView(pdfDocument: pdfDocument)
                 .background(CMColor.white)
         }
     }
     
-    // MARK: - Document Image View
-    private func documentImageView(image: UIImage, scalingFactor: CGFloat) -> some View {
+    private func p_imagePreview(image: UIImage, scalingFactor: CGFloat) -> some View {
         ScrollView([.horizontal, .vertical]) {
             VStack(spacing: 16 * scalingFactor) {
-                // Document header info
-                documentInfoCard(scalingFactor: scalingFactor)
+                p_infoCard(scalingFactor: scalingFactor)
                     .padding(.horizontal, 16 * scalingFactor)
                 
-                // Image content
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -240,40 +221,32 @@ struct EnhancedDocumentPreviewView: View {
                     )
                     .padding(.horizontal, 16 * scalingFactor)
                 
-                // Action buttons
-                actionButtonsView(scalingFactor: scalingFactor)
+                p_actionButtons(scalingFactor: scalingFactor)
                     .padding(.horizontal, 16 * scalingFactor)
             }
             .padding(.vertical, 20 * scalingFactor)
         }
     }
     
-    // MARK: - Web Document View
-    private func webDocumentView(htmlContent: String, scalingFactor: CGFloat) -> some View {
+    private func p_webPreview(htmlContent: String, scalingFactor: CGFloat) -> some View {
         VStack(spacing: 0) {
-            // Document info bar
-            documentInfoBar(scalingFactor: scalingFactor)
+            p_infoBar(scalingFactor: scalingFactor)
             
-            // Web content
             WebViewRepresentable(htmlContent: htmlContent)
                 .background(CMColor.white)
         }
     }
     
-    // MARK: - Unsupported View
-    private func unsupportedView(scalingFactor: CGFloat) -> some View {
+    private func p_unsupportedScreen(scalingFactor: CGFloat) -> some View {
         ScrollView {
             VStack(spacing: 24 * scalingFactor) {
                 Spacer()
                 
-                // Document header info
-                documentInfoCard(scalingFactor: scalingFactor)
+                p_infoCard(scalingFactor: scalingFactor)
                 
-                // Check if it's a .doc/.docx file that can use QuickLook
                 if let fileExtension = document.fileExtension?.lowercased(),
                    ["doc", "docx"].contains(fileExtension) {
                     
-                    // For Word documents, show QuickLook preview
                     VStack(spacing: 16 * scalingFactor) {
                         Image(systemName: "doc.text.fill")
                             .font(.system(size: 48 * scalingFactor))
@@ -289,7 +262,6 @@ struct EnhancedDocumentPreviewView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 32 * scalingFactor)
                         
-                        // QuickLook preview if available
                         if QLPreviewController.canPreview(document.documentURL as QLPreviewItem) {
                             DocumentQuickLookView(url: document.documentURL)
                                 .frame(height: 400 * scalingFactor)
@@ -301,7 +273,6 @@ struct EnhancedDocumentPreviewView: View {
                         }
                     }
                 } else {
-                    // For other unsupported types
                     VStack(spacing: 16 * scalingFactor) {
                         Image(systemName: "doc.text")
                             .font(.system(size: 48 * scalingFactor))
@@ -319,8 +290,7 @@ struct EnhancedDocumentPreviewView: View {
                     }
                 }
                 
-                // Action buttons
-                actionButtonsView(scalingFactor: scalingFactor)
+                p_actionButtons(scalingFactor: scalingFactor)
                 
                 Spacer()
             }
@@ -329,13 +299,11 @@ struct EnhancedDocumentPreviewView: View {
         }
     }
     
-    // MARK: - Error View
-    private func errorView(errorMessage: String, scalingFactor: CGFloat) -> some View {
+    private func p_errorScreen(errorMessage: String, scalingFactor: CGFloat) -> some View {
         ScrollView {
             VStack(spacing: 24 * scalingFactor) {
                 Spacer()
                 
-                // Error icon
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 48 * scalingFactor))
                     .foregroundColor(CMColor.error)
@@ -352,8 +320,7 @@ struct EnhancedDocumentPreviewView: View {
                         .padding(.horizontal, 32 * scalingFactor)
                 }
                 
-                // Document info
-                documentInfoCard(scalingFactor: scalingFactor)
+                p_infoCard(scalingFactor: scalingFactor)
                 
                 Spacer()
             }
@@ -362,11 +329,10 @@ struct EnhancedDocumentPreviewView: View {
         }
     }
     
-    // MARK: - Document Info Card
-    private func documentInfoCard(scalingFactor: CGFloat) -> some View {
+    // MARK: - Reusable Components
+    private func p_infoCard(scalingFactor: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 12 * scalingFactor) {
             HStack(spacing: 12 * scalingFactor) {
-                // Document icon
                 ZStack {
                     RoundedRectangle(cornerRadius: 8 * scalingFactor)
                         .fill(CMColor.primary.opacity(0.1))
@@ -377,7 +343,6 @@ struct EnhancedDocumentPreviewView: View {
                         .foregroundColor(CMColor.primary)
                 }
                 
-                // Document details
                 VStack(alignment: .leading, spacing: 4 * scalingFactor) {
                     Text(document.fileName)
                         .font(.system(size: 16 * scalingFactor, weight: .semibold))
@@ -413,10 +378,8 @@ struct EnhancedDocumentPreviewView: View {
         )
     }
     
-    // MARK: - Document Info Bar
-    private func documentInfoBar(scalingFactor: CGFloat) -> some View {
+    private func p_infoBar(scalingFactor: CGFloat) -> some View {
         HStack(spacing: 12 * scalingFactor) {
-            // Document icon
             ZStack {
                 RoundedRectangle(cornerRadius: 6 * scalingFactor)
                     .fill(CMColor.primary.opacity(0.1))
@@ -427,7 +390,6 @@ struct EnhancedDocumentPreviewView: View {
                     .foregroundColor(CMColor.primary)
             }
             
-            // Document details
             VStack(alignment: .leading, spacing: 2 * scalingFactor) {
                 Text(document.fileName)
                     .font(.system(size: 14 * scalingFactor, weight: .medium))
@@ -453,9 +415,8 @@ struct EnhancedDocumentPreviewView: View {
             
             Spacer()
             
-            // Share button
             Button(action: {
-                showShareSheet = true
+                p_showShareSheet = true
             }) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.system(size: 16 * scalingFactor, weight: .medium))
@@ -473,12 +434,10 @@ struct EnhancedDocumentPreviewView: View {
         )
     }
     
-    // MARK: - Action Buttons
-    private func actionButtonsView(scalingFactor: CGFloat) -> some View {
+    private func p_actionButtons(scalingFactor: CGFloat) -> some View {
         HStack(spacing: 12 * scalingFactor) {
-            // Share button
             Button(action: {
-                showShareSheet = true
+                p_showShareSheet = true
             }) {
                 HStack(spacing: 8 * scalingFactor) {
                     Image(systemName: "square.and.arrow.up")
@@ -496,108 +455,92 @@ struct EnhancedDocumentPreviewView: View {
         }
     }
     
-    // MARK: - Helper Methods
-    private func loadDocumentContent() {
+    // MARK: - Data Operations
+    private func p_loadContent() {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let url = document.documentURL
                 
-                // Check if file exists
                 guard FileManager.default.fileExists(atPath: url.path) else {
                     DispatchQueue.main.async {
-                        self.documentContent = .error("Document file not found")
+                        self.p_documentContent = .error("Document file not found")
                     }
                     return
                 }
                 
-                // Determine content type based on file extension
                 let fileExtension = document.fileExtension?.lowercased() ?? ""
                 
                 switch fileExtension {
                 case "pdf":
                     if let pdfDocument = PDFDocument(url: url) {
                         DispatchQueue.main.async {
-                            self.documentContent = .pdf(pdfDocument)
+                            self.p_documentContent = .pdf(pdfDocument)
                         }
                     } else {
                         DispatchQueue.main.async {
-                            self.documentContent = .error("Cannot load PDF document")
+                            self.p_documentContent = .error("Cannot load PDF document")
                         }
                     }
                     
                 case "txt", "md", "rtf":
                     let content = try String(contentsOf: url, encoding: .utf8)
                     DispatchQueue.main.async {
-                        self.documentContent = .text(content)
+                        self.p_documentContent = .text(content)
                     }
                     
                 case "html", "htm":
                     let htmlContent = try String(contentsOf: url, encoding: .utf8)
                     DispatchQueue.main.async {
-                        self.documentContent = .web(htmlContent)
+                        self.p_documentContent = .web(htmlContent)
                     }
                     
                 case "doc", "docx":
-                    // For Word documents, try to extract text content
-                    self.loadWordDocument(from: url)
+                    DispatchQueue.main.async {
+                        self.p_documentContent = .unsupported
+                    }
                     
                 case "jpg", "jpeg", "png", "gif", "bmp", "tiff":
                     if let image = UIImage(contentsOfFile: url.path) {
                         DispatchQueue.main.async {
-                            self.documentContent = .image(image)
+                            self.p_documentContent = .image(image)
                         }
                     } else {
                         DispatchQueue.main.async {
-                            self.documentContent = .error("Cannot load image")
+                            self.p_documentContent = .error("Cannot load image")
                         }
                     }
                     
                 default:
-                    // Try to read as text first
                     if let content = try? String(contentsOf: url, encoding: .utf8),
                        !content.isEmpty,
-                       content.count < 100000 { // Limit text size
+                       content.count < 100000 {
                         DispatchQueue.main.async {
-                            self.documentContent = .text(content)
+                            self.p_documentContent = .text(content)
                         }
                     } else {
                         DispatchQueue.main.async {
-                            self.documentContent = .unsupported
+                            self.p_documentContent = .unsupported
                         }
                     }
                 }
                 
             } catch {
                 DispatchQueue.main.async {
-                    self.documentContent = .error("Error loading document: \(error.localizedDescription)")
+                    self.p_documentContent = .error("Error loading document: \(error.localizedDescription)")
                 }
             }
         }
     }
     
-    private func loadWordDocument(from url: URL) {
-        // For Word documents, check if file exists and use QuickLook preview
-        if FileManager.default.fileExists(atPath: url.path) {
-            DispatchQueue.main.async {
-                self.documentContent = .unsupported
-            }
-        } else {
-            DispatchQueue.main.async {
-                self.documentContent = .error("Word document file not found")
-            }
-        }
-    }
-    
-    private func deleteDocument() {
-        isDeleting = true
+    private func p_deleteContent() {
+        p_isDeletionActive = true
         
         DispatchQueue.global(qos: .userInitiated).async {
-            // Delete the document using SafeStorageManager
-            self.safeStorageManager.deleteDocuments([self.document])
+            self.p_storageManager.deleteDocuments([self.document])
             
             DispatchQueue.main.async {
-                self.isDeleting = false
-                self.dismiss()
+                self.p_isDeletionActive = false
+                self.p_dismiss()
             }
         }
     }
