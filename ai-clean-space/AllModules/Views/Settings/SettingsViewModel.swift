@@ -4,11 +4,9 @@ import SafariServices
 import StoreKit
 
 enum ResurcesUrlsConstants {
-    // todo Замените эти URL на реальные
-    static let licenseAgreementURL: String = "https://docs.google.com/document/d/1OwaR-nw8bOiLE0QM2t7mgsZhH_piBTMcfOrvcov3a8M/edit?usp=sharing"
-    static let privacyPolicyURL: String = "https://docs.google.com/document/d/1ODflJsIb9M4ciQiYU6ZWQZ1ETMbvjW6-ifpNjVzgUSE/edit?usp=sharing"
-    static let termsURL: String = "https://docs.google.com/document/d/1OwaR-nw8bOiLE0QM2t7mgsZhH_piBTMcfOrvcov3a8M/edit?usp=sharing"
-    static let feedBackEmail: String = "feedback@yourapp.com"
+    static let licenseAgreementURL: String = "https://docs.google.com/document/d/1Bui27Z99LoyQN86Kal7rI1S65T0x-UTrM619Kufuom4/edit?usp=sharing"
+    static let privacyPolicyURL: String = "https://docs.google.com/document/d/1UgJhUk01_cvZK3x0626_x65HXoirR4mEU9RrJw_1ZLI/edit?usp=sharing"
+    static let contactUsEmail: String = ""
 }
 
 final class SettingsViewModel: ObservableObject {
@@ -37,7 +35,7 @@ final class SettingsViewModel: ObservableObject {
     func sendFeedbackTapped() {
         let subject = "Feedback"
         let body = ""
-        let mailtoString = "mailto:\(ResurcesUrlsConstants.feedBackEmail)?subject=\(subject)&body=\(body)"
+        let mailtoString = "mailto:\(ResurcesUrlsConstants.contactUsEmail)?subject=\(subject)&body=\(body)"
         
         if let mailtoUrl = URL(string: mailtoString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
             UIApplication.shared.open(mailtoUrl)

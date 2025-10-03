@@ -79,7 +79,7 @@ final class StoragePerformer {
             let context = self.persistentContainer.newBackgroundContext()
             context.perform {
                 do {
-                    for (index, item) in data.enumerated() {
+                    for item in data {
                         let entity = MediaCacheSizeEntity(context: context)
                         entity.id = item.id
                         entity.value = item.value

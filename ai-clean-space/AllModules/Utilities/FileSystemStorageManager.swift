@@ -43,7 +43,7 @@ class FileSystemStorageManager {
             ("Thumbnails", thumbnailsDirectory)
         ]
         
-        for (name, directory) in directories {
+        for (_, directory) in directories {
             let directoryExists = FileManager.default.fileExists(atPath: directory.path)
             
             if !directoryExists {
@@ -53,7 +53,6 @@ class FileSystemStorageManager {
     }
     
     static func savePhoto(_ imageData: Data, fileName: String? = nil) throws -> (imageURL: URL, thumbnailURL: URL?) {
-        let startTime = CFAbsoluteTimeGetCurrent()
         let actualFileName = fileName ?? "photo_\(UUID().uuidString).jpg"
         
         do {
@@ -61,7 +60,6 @@ class FileSystemStorageManager {
             
             let imageURL = photosDirectory.appendingPathComponent(actualFileName)
             try imageData.write(to: imageURL)
-            let fileSize = FileSystemStorageManager.fileSize(at: imageURL)
             var thumbnailURL: URL?
             
             if let thumbnailData = generateThumbnail(from: imageData) {
@@ -69,11 +67,8 @@ class FileSystemStorageManager {
                 thumbnailURL = thumbnailsDirectory.appendingPathComponent(thumbnailFileName)
                 
                 try thumbnailData.write(to: thumbnailURL!)
-                let thumbnailFileSize = FileSystemStorageManager.fileSize(at: thumbnailURL!)
             }
-            
-            let duration = CFAbsoluteTimeGetCurrent() - startTime
-            
+                        
             return (imageURL: imageURL, thumbnailURL: thumbnailURL)
             
         } catch {
@@ -95,7 +90,6 @@ class FileSystemStorageManager {
     }
     
     static func saveVideo(_ videoData: Data, fileName: String? = nil) throws -> (videoURL: URL, thumbnailURL: URL?) {
-        let startTime = CFAbsoluteTimeGetCurrent()
         let actualFileName = fileName ?? "video_\(UUID().uuidString).mp4"
 
         do {
@@ -103,19 +97,14 @@ class FileSystemStorageManager {
             
             let videoURL = videosDirectory.appendingPathComponent(actualFileName)
             try videoData.write(to: videoURL)
-            let fileSize = FileSystemStorageManager.fileSize(at: videoURL)
-            
-            let duration = extractVideoDuration(from: videoURL)
             var thumbnailURL: URL?
             
             do {
                 thumbnailURL = try generateVideoThumbnail(from: videoURL)
-                let thumbnailFileSize = FileSystemStorageManager.fileSize(at: thumbnailURL!)
             } catch {
                 print("⚠️ Failed to generate video thumbnail: \(error.localizedDescription)")
             }
             
-            let totalDuration = CFAbsoluteTimeGetCurrent() - startTime
             return (videoURL: videoURL, thumbnailURL: thumbnailURL)
             
         } catch {
@@ -178,9 +167,7 @@ class FileSystemStorageManager {
         guard FileManager.default.fileExists(atPath: url.path) else {
             return
         }
-        
-        let fileSize = fileSize(at: url)
-        
+                
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
