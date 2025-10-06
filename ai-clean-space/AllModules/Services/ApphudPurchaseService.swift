@@ -5,10 +5,11 @@ import Combine
 // MARK: - App Constants and Types
 
 /// Defines the supported subscription product types.
+// todo PRO
 enum PurchaseServiceProduct: String, CaseIterable {
-    case week = "week_499_3dtrial"
-    case month3 = "3months_999_notrial"
-    case year = "year_8999_notrial"
+    case week = "1"
+    case month3 = "2"
+    case year = "3"
 }
 
 /// Defines the outcome of a purchase or restore operation.

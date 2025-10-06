@@ -13,7 +13,6 @@ struct ProBadgeView: View {
         Button(action: {
             isPaywallPresented = true
         }) {
-            // todo PRO
             HStack(spacing: 8) {
                 Image(systemName: "star.fill")
                     .font(.system(size: 16))
