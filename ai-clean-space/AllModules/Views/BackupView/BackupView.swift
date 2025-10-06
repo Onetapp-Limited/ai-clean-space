@@ -90,14 +90,14 @@ struct BackupView: View {
     // MARK: - Навигационная панель
     private var navigationBar: some View {
         HStack {
-            Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 20 * scalingFactor, weight: .semibold))
-                    .foregroundColor(CMColor.primary)
-                    .padding(.vertical, 8)
-            }
+//            Button(action: {
+//                dismiss()
+//            }) {
+//                Image(systemName: "chevron.left")
+//                    .font(.system(size: 20 * scalingFactor, weight: .semibold))
+//                    .foregroundColor(CMColor.primary)
+//                    .padding(.vertical, 8)
+//            }
             
             Spacer()
             
