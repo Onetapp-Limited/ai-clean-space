@@ -206,6 +206,11 @@ struct SafeStorageView: View {
                 .cornerRadius(16)
                 .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
                 .onTapGesture {
+                    guard ApphudPurchaseService.shared.hasActiveSubscription else {
+                        isPaywallPresented = true
+                        return
+                    }
+                    
                     if category.title == "Docs" {
                         showDocumentsView = true
                     } else if category.title == "Photos" {

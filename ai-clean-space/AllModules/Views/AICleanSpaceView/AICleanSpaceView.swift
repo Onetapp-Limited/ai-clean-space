@@ -19,8 +19,7 @@ struct AICleanSpaceView: View {
             CMColor.background
                 .ignoresSafeArea()
             
-            // todo PRO
-//            if paywallShown {
+            if paywallShown {
                 VStack(spacing: 0) {
                     switch viewModel.currentSelectedTab {
                     case .clean:
@@ -40,7 +39,7 @@ struct AICleanSpaceView: View {
                         isSafeFolderUnlocked = false
                     }
                 }
-//            }
+            }
 
             if isTabBarVisible {
                 VStack {
@@ -51,18 +50,18 @@ struct AICleanSpaceView: View {
                 }
             }
         }
-        // todo PRO
-//        .fullScreenCover(isPresented: $isPaywallPresented) {
-//            PaywallView(isPresented: $isPaywallPresented)
-//                .onDisappear {
-//                    paywallShown = true
-//                }
-//        }
-//        .onAppear {
-//            if !paywallShown {
-//                isPaywallPresented = true
-//            }
-//        }
+
+        .fullScreenCover(isPresented: $isPaywallPresented) {
+            PaywallView(isPresented: $isPaywallPresented)
+                .onDisappear {
+                    paywallShown = true
+                }
+        }
+        .onAppear {
+            if !paywallShown {
+                isPaywallPresented = true
+            }
+        }
     }
     
     // MARK: - Новый экран: Safe Folder

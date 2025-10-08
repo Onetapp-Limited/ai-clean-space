@@ -7,7 +7,7 @@ import Combine
 /// Defines the supported subscription product types.
 // todo PRO
 enum PurchaseServiceProduct: String, CaseIterable {
-    case week = "1"
+    case week = "week_899_3dtrial"
     case month3 = "2"
     case year = "3"
 }
@@ -32,13 +32,16 @@ enum PurchaseError: Error {
 public extension SKProduct {
     /// The localized price string for the product.
     var localizedPrice: String? {
-        return PriceFormatter.formatter.string(from: price)
-    }
+         let formatter = NumberFormatter()
+         formatter.numberStyle = .currency
+         formatter.locale = self.priceLocale
+         return formatter.string(from: self.price)
+     }
 
-    /// The currency symbol for the product.
-    var currency: String {
-        return PriceFormatter.formatter.currencySymbol
-    }
+     /// The currency symbol for the product.
+     var currency: String {
+         return self.priceLocale.currencySymbol ?? ""
+     }
 
     private struct PriceFormatter {
         static let formatter: NumberFormatter = {
@@ -64,13 +67,14 @@ final class ApphudPurchaseService {
 
     /// Checks if the user has an active subscription.
     var hasActiveSubscription: Bool {
-        true // todo: test111
-//        Apphud.hasActiveSubscription()
+        Apphud.hasActiveSubscription()
     }
     
+    static var shared = ApphudPurchaseService()
+
     // MARK: - Initialization
     
-    init() {
+    private init() {
         Task {
             await fetchProducts()
         }
@@ -114,7 +118,7 @@ final class ApphudPurchaseService {
     func localizedPrice(for product: PurchaseServiceProduct) -> String? {
         guard let skProduct = getSKProduct(for: product) else {
             // Fallback for when Apphud products are not available
-            return "$1.99" // Updated fallback price
+            return "" // Updated fallback price
         }
         return skProduct.localizedPrice
     }
@@ -127,7 +131,7 @@ final class ApphudPurchaseService {
 
     /// Calculates and returns the per-day price string.
     func perDayPrice(for product: PurchaseServiceProduct) -> String {
-        let defaultPerDayPrice = "$0.71" // Updated fallback per-day price
+        let defaultPerDayPrice = "" // Updated fallback per-day price
         
         guard let priceValue = price(for: product),
               let currencySymbol = currency(for: product) else {
