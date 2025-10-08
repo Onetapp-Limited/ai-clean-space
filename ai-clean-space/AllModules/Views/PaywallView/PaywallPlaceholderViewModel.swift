@@ -1,12 +1,12 @@
 import SwiftUI
 import Combine
+import AppsFlyerLib
 
 // MARK: - PaywallViewModel: Handles the business logic for the paywall view
 final class PaywallViewModel: ObservableObject {
     
     // MARK: - Private Properties
     
-    private let purchaseService = ApphudPurchaseService()
     private let isPresentedBinding: Binding<Bool>
 
     // MARK: - Published Properties
@@ -34,12 +34,20 @@ final class PaywallViewModel: ObservableObject {
     /// Handles the purchase button tap action.
     @MainActor
     func continueTapped(with plan: SubscriptionPlan) {
-        purchaseService.purchase(plan: plan) { [weak self] result in
+        ApphudPurchaseService.shared.purchase(plan: plan) { [weak self] result in
             guard let self = self else { return }
             
             if case .failure(let error) = result {
                 print("Error during purchase: \(error?.localizedDescription ?? "Unknown error")")
                 return
+            }
+            
+            if case .success = result {
+                AppsFlyerLib.shared().logEvent("af_purchase", withValues: [
+                    AFEventParamRevenue: weekPrice,
+                    AFEventParamCurrency: ApphudPurchaseService.shared.currency,
+                    AFEventParamContentId: PurchaseServiceProduct.week.rawValue
+                ])
             }
             
             self.dismissPaywall()
@@ -49,7 +57,7 @@ final class PaywallViewModel: ObservableObject {
     /// Handles the restore purchases button tap action.
     @MainActor
     func restoreTapped() {
-        purchaseService.restore() { [weak self] result in
+        ApphudPurchaseService.shared.restore() { [weak self] result in
             guard let self = self else { return }
             
             if case .failure(let error) = result {
@@ -79,18 +87,16 @@ final class PaywallViewModel: ObservableObject {
     
     /// Asynchronously updates all price-related published properties.
     private func updatePrices() async {
-        // Wait for Apphud products to be fetched
-        // This simulates a slight delay that might occur in a real app
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
+//        try? await Task.sleep(nanoseconds: 1_000_000_000)
         
         await MainActor.run {
-            self.weekPrice = purchaseService.localizedPrice(for: .week) ?? "N/A"
-            self.month3Price = purchaseService.localizedPrice(for: .month3) ?? "N/A" // NEW
-            self.yearPrice = purchaseService.localizedPrice(for: .year) ?? "N/A" // NEW
+            self.weekPrice = ApphudPurchaseService.shared.localizedPrice(for: .week) ?? "N/A"
+//            self.month3Price = ApphudPurchaseService.shared.localizedPrice(for: .month3) ?? "N/A" // NEW
+//            self.yearPrice = ApphudPurchaseService.shared.localizedPrice(for: .year) ?? "N/A" // NEW
             
-            self.weekPricePerDay = purchaseService.perDayPrice(for: .week)
-            self.month3PricePerDay = purchaseService.perDayPrice(for: .month3) // NEW
-            self.yearPricePerDay = purchaseService.perDayPrice(for: .year) // NEW
+            self.weekPricePerDay = ApphudPurchaseService.shared.perDayPrice(for: .week)
+//            self.month3PricePerDay = ApphudPurchaseService.shared.perDayPrice(for: .month3) // NEW
+//            self.yearPricePerDay = ApphudPurchaseService.shared.perDayPrice(for: .year) // NEW
         }
     }
     
