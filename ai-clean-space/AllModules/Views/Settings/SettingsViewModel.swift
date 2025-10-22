@@ -15,6 +15,12 @@ final class SettingsViewModel: ObservableObject {
     @Published var isFaceIDInAppEnabled: Bool = false
     @Published var isSecretSpacePasscodeEnabled: Bool = true
     @Published var isSecretSpaceFaceIDEnabled: Bool = true
+    @Published var isPasswordCreated: Bool = UserDefaults.standard.bool(forKey: "isPasswordCreated")
+       
+    func markPasswordCreated() {
+        UserDefaults.standard.set(true, forKey: "isPasswordCreated")
+        isPasswordCreated = true
+    }
     
     func rateUsTapped() {
         if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {

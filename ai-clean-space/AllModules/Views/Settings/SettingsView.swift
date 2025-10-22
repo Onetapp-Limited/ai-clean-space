@@ -118,11 +118,12 @@ struct SettingsView: View {
                 .padding(.leading, 10 * contentScalingFactor)
             
             VStack(spacing: 1 * contentScalingFactor) {
-                // Ячейка для "Change passcode"
                 SecurityNavigationRow(
                     title: "Change passcode",
                     action: { showChangePasscodeView = true }
                 )
+                .disabled(!viewModel.isPasswordCreated)
+                .opacity(viewModel.isPasswordCreated ? 1.0 : 0.5)
             }
             .background(CMColor.surface)
             .clipShape(RoundedRectangle(cornerRadius: 20 * contentScalingFactor, style: .continuous))

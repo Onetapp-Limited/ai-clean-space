@@ -132,6 +132,9 @@ struct SafeStorageView: View {
             DocListView()
                 .environmentObject(safeStorageManager)
         }
+        .onAppear() {
+            UserDefaults.standard.set(true, forKey: "isPasswordCreated")
+        }
     }
     
     // MARK: - Subviews
