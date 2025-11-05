@@ -1,29 +1,22 @@
 workflows:
-  surfshield-app:
-    name: Ad Blocker App
+  ai-clean-space-app:
+    name: AI Clean Space Build
     max_build_duration: 60
     
     environment:
-      groups:
-        - app_store_credentials
+      # Убран блок 'groups', так как он не используется
       vars:
-        # Адаптировано под ваш проект
-        XCODE_PROJECT: "AdBlockerMain.xcodeproj"
-        XCODE_SCHEME: "SurfShield"
-        BUNDLE_ID: "com.adblockerapp"
+        # Ваши данные проекта
+        XCODE_PROJECT: "ai-clean-space.xcodeproj"
+        XCODE_SCHEME: "ai-clean-space"
+        BUNDLE_ID: "com.cleaner.max"
       
       xcode: latest
       
     scripts:
       
-      - name: Test echo
-        script: |
-          # Проверка доступности ключей (Для P8 API и P12 из UI)
-          echo $APP_STORE_CONNECT_ISSUER_ID
-          echo $APP_STORE_CONNECT_KEY_IDENTIFIER
-          echo $APP_STORE_CONNECT_PRIVATE_KEY
-          echo $CERTIFICATE_PRIVATE_KEY
-          
+      # Секция 'Test echo' удалена, т.к. она была просто для проверки.
+      
       - name: Set up keychain
         script: |
           # Инициализация связки ключей
@@ -31,14 +24,13 @@ workflows:
           
       - name: Fetch signing files
         script: |
-          # Скачиваем профили, используя P8 ключ. Флаг --create позволяет 
-          # App Store Connect обновить профили, если они не валидны.
+          # Скачиваем профили, используя P8 ключ (требуется настройка ключей в UI)
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE --create
             
       - name: Use system default keychain and install certificates
         script: |
-          # Установка P12-сертификата, который вы загрузили через Codemagic UI
+          # Установка P12-сертификата (загруженного через Codemagic UI)
           keychain add-certificates
           
       - name: Set up code signing settings on Xcode project
@@ -48,8 +40,7 @@ workflows:
           
       - name: Build ipa for distribution
         script: |
-          # Используем команду Codemagic CLI для надежной сборки.
-          # для решения проблемы с файлом Entitlements.
+          # Сборка ipa с использованием ваших схемы и проекта
           xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME"
@@ -60,6 +51,7 @@ workflows:
       
     publishing:
       app_store_connect:
+        # Убедитесь, что эти переменные установлены в Codemagic UI в секции 'Environment variables'
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
