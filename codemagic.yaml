@@ -4,7 +4,8 @@ workflows:
     max_build_duration: 60
     
     environment:
-      # Убран блок 'groups', так как он не используется
+      groups:
+        - app_store_credentials # <--- ВОЗВРАЩЕНА ССЫЛКА НА ВАШУ ГРУППУ ПЕРЕМЕННЫХ
       vars:
         # Ваши данные проекта
         XCODE_PROJECT: "ai-clean-space.xcodeproj"
