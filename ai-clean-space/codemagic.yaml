@@ -1,0 +1,66 @@
+workflows:
+  surfshield-app:
+    name: Ad Blocker App
+    max_build_duration: 60
+    
+    environment:
+      groups:
+        - app_store_credentials
+      vars:
+        # Адаптировано под ваш проект
+        XCODE_PROJECT: "AdBlockerMain.xcodeproj"
+        XCODE_SCHEME: "SurfShield"
+        BUNDLE_ID: "com.adblockerapp"
+      
+      xcode: latest
+      
+    scripts:
+      
+      - name: Test echo
+        script: |
+          # Проверка доступности ключей (Для P8 API и P12 из UI)
+          echo $APP_STORE_CONNECT_ISSUER_ID
+          echo $APP_STORE_CONNECT_KEY_IDENTIFIER
+          echo $APP_STORE_CONNECT_PRIVATE_KEY
+          echo $CERTIFICATE_PRIVATE_KEY
+          
+      - name: Set up keychain
+        script: |
+          # Инициализация связки ключей
+          keychain initialize
+          
+      - name: Fetch signing files
+        script: |
+          # Скачиваем профили, используя P8 ключ. Флаг --create позволяет 
+          # App Store Connect обновить профили, если они не валидны.
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE --create
+            
+      - name: Use system default keychain and install certificates
+        script: |
+          # Установка P12-сертификата, который вы загрузили через Codemagic UI
+          keychain add-certificates
+          
+      - name: Set up code signing settings on Xcode project
+        script: |
+          # Применяем скачанные профили к проекту
+          xcode-project use-profiles
+          
+      - name: Build ipa for distribution
+        script: |
+          # Используем команду Codemagic CLI для надежной сборки.
+          # для решения проблемы с файлом Entitlements.
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME"
+            
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+      
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
